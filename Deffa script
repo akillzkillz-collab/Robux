@@ -1,0 +1,150 @@
+--[[\
+    Project: Custom Input Currency Hub (Pro Edition)
+    Target Environment: Mobile / Delta Executor
+]]--
+
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+pcall(function()
+    if CoreGui:FindFirstChild("CustomInputHub") then 
+        CoreGui.CustomInputHub:Destroy() 
+    end
+end)
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "CustomInputHub"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = CoreGui
+
+-- 1. IKON GEAR APUNG (Boleh heret)
+local gearBtn = Instance.new("TextButton")
+gearBtn.Size = UDim2.new(0, 56, 0, 56)
+gearBtn.Position = UDim2.new(0.05, 0, 0.25, 0)
+gearBtn.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
+gearBtn.Text = "⚙️"
+gearBtn.TextSize = 28
+gearBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+gearBtn.Draggable = true
+gearBtn.Active = true
+gearBtn.Parent = screenGui
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 16)
+btnCorner.Parent = gearBtn
+
+local btnStroke = Instance.new("UIStroke")
+btnStroke.Color = Color3.fromRGB(80, 140, 255)
+btnStroke.Thickness = 2
+btnStroke.Parent = gearBtn
+
+-- 2. PANEL UTAMA DENGAN KOTAK INPUT
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 340, 0, 300)
+mainFrame.Position = UDim2.new(0.5, -170, 0.5, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(12, 14, 22)
+mainFrame.Visible = false
+mainFrame.Draggable = true
+mainFrame.Active = true
+mainFrame.Parent = screenGui
+
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 16)
+frameCorner.Parent = mainFrame
+
+local frameStroke = Instance.new("UIStroke")
+frameStroke.Color = Color3.fromRGB(80, 140, 255)
+frameStroke.Thickness = 2
+frameStroke.Parent = mainFrame
+
+-- Tajuk
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 0, 42)
+titleLabel.BackgroundColor3 = Color3.fromRGB(20, 24, 36)
+titleLabel.Text = "  ⚡ CUSTOM AMOUNT GENERATOR"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextSize = 11
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 16)
+titleCorner.Parent = titleLabel
+
+-- Label Arahan Kotak Taip
+local labelInput = Instance.new("TextLabel")
+labelInput.Size = UDim2.new(0.88, 0, 0, 18)
+labelInput.Position = UDim2.new(0.06, 0, 0, 55)
+labelInput.BackgroundTransparency = 1
+labelInput.Text = "TAIP JUMLAH BERLIAN / ROBUX DI SINI:"
+labelInput.TextColor3 = Color3.fromRGB(130, 160, 200)
+labelInput.TextSize = 10
+labelInput.Font = Enum.Font.GothamBold
+labelInput.TextXAlignment = Enum.TextXAlignment.Left
+labelInput.Parent = mainFrame
+
+-- KOTAK INPUT (Tempat awak boleh taip nombor sesuka hati)
+local amountInput = Instance.new("TextBox")
+amountInput.Size = UDim2.new(0.88, 0, 0, 40)
+amountInput.Position = UDim2.new(0.06, 0, 0, 78)
+amountInput.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+amountInput.Text = "999999999"
+amountInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+amountInput.TextSize = 14
+amountInput.Font = Enum.Font.Code
+amountInput.ClearTextOnFocus = false
+amountInput.Parent = mainFrame
+
+local inputCorner = Instance.new("UICorner")
+inputCorner.CornerRadius = UDim.new(0, 8)
+inputCorner.Parent = amountInput
+
+-- Butang Apply
+local applyBtn = Instance.new("TextButton")
+applyBtn.Size = UDim2.new(0.88, 0, 0, 36)
+applyBtn.Position = UDim2.new(0.06, 0, 0, 128)
+applyBtn.BackgroundColor3 = Color3.fromRGB(40, 110, 240)
+applyBtn.Text = "APPLY VALUE"
+applyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+applyBtn.TextSize = 12
+applyBtn.Font = Enum.Font.GothamBold
+applyBtn.Parent = mainFrame
+
+local applyCorner = Instance.new("UICorner")
+applyCorner.CornerRadius = UDim.new(0, 8)
+applyCorner.Parent = applyBtn
+
+-- Kotak Status Info
+local statusBox = Instance.new("TextLabel")
+statusBox.Size = UDim2.new(0.88, 0, 0, 75)
+statusBox.Position = UDim2.new(0.06, 0, 0, 180)
+statusBox.BackgroundColor3 = Color3.fromRGB(18, 22, 32)
+statusBox.Text = "Status: Sedia untuk diuji. Taip nombor di atas dan tekan Apply untuk lihat hasilnya pada paparan skrin anda!"
+statusBox.TextColor3 = Color3.fromRGB(100, 220, 140)
+statusBox.TextSize = 10
+statusBox.Font = Enum.Font.Code
+statusBox.TextWrapped = true
+statusBox.Parent = mainFrame
+
+local statusCorner = Instance.new("UICorner")
+statusCorner.CornerRadius = UDim.new(0, 8)
+statusCorner.Parent = statusBox
+
+-- Tindakan Apabila Butang Apply Ditekan
+applyBtn.MouseButton1Click:Connect(function()
+    local userValue = amountInput.Text
+    statusBox.Text = "Status Berjaya! Nilai dikemas kini kepada: " .. userValue
+    applyBtn.Text = "APPLIED!"
+    task.wait(1)
+    applyBtn.Text = "APPLY VALUE"
+end)
+
+-- Logik Buka/Tutup Menu Gear
+local isOpen = false
+gearBtn.MouseButton1Click:Connect(function()
+    isOpen = not isOpen
+    mainFrame.Visible = isOpen
+end)
